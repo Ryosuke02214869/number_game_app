@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/numeron_game_page.dart';
+import 'screens/numeron2_game_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,6 +55,21 @@ class GameSelectionPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const NumeronGamePage(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildGameButton(
+                context,
+                title: 'ヌメロン2',
+                subtitle: '色で分かりやすく！',
+                icon: Icons.grid_on,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Numeron2GamePage(),
                     ),
                   );
                 },

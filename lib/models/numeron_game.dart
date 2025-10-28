@@ -309,3 +309,6 @@ class Numeron3Game {
   // デバッグ用（実際のゲームでは使用しない）
   String get targetNumberForDebug => _targetNumber.join();
 }
+
+// Numeron4Game = Numeron2Game（4桁重複なし、制限時間はUI側で管理）
+typedef Numeron4Game = Numeron2Game;

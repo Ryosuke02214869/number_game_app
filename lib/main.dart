@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/numeron_game_page.dart';
 import 'screens/numeron2_game_page.dart';
 import 'screens/numeron3_game_page.dart';
+import 'screens/numeron4_game_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -86,6 +87,21 @@ class GameSelectionPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Numeron3GamePage(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildGameButton(
+                context,
+                title: 'ヌメロン4',
+                subtitle: '制限時間30秒のタイムアタック！',
+                icon: Icons.timer,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Numeron4GamePage(),
                     ),
                   );
                 },

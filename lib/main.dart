@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/numeron_game_page.dart';
 import 'screens/numeron2_game_page.dart';
+import 'screens/numeron3_game_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +34,7 @@ class GameSelectionPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,6 +71,21 @@ class GameSelectionPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Numeron2GamePage(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildGameButton(
+                context,
+                title: 'ヌメロン3',
+                subtitle: '桁数と重複をカスタマイズ！',
+                icon: Icons.tune,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Numeron3GamePage(),
                     ),
                   );
                 },

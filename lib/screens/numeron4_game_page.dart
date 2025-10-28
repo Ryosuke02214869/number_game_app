@@ -21,7 +21,7 @@ class _Numeron4GamePageState extends State<Numeron4GamePage> {
     (_) => FocusNode(),
   );
   String _errorMessage = '';
-  bool _isRuleExpanded = true;
+  bool _isRuleExpanded = false;
 
   // タイマー関連
   static const int _totalSeconds = 30;
@@ -179,6 +179,7 @@ class _Numeron4GamePageState extends State<Numeron4GamePage> {
   }
 
   void _resetGame() {
+    _timer?.cancel(); // 既存のタイマーをキャンセル
     setState(() {
       _game.reset();
       for (var controller in _controllers) {
@@ -251,7 +252,7 @@ class _Numeron4GamePageState extends State<Numeron4GamePage> {
           ),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -382,33 +383,26 @@ class _Numeron4GamePageState extends State<Numeron4GamePage> {
               ),
             const SizedBox(height: 16),
             // 制限時間インジケーター
-            Column(
+            Row(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '残り時間',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: LinearProgressIndicator(
+                      value: _remainingSeconds / _totalSeconds,
+                      minHeight: 20,
+                      backgroundColor: Colors.grey[300],
+                      valueColor: AlwaysStoppedAnimation<Color>(_getTimerColor()),
                     ),
-                    Text(
-                      '$_remainingSeconds秒',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: _getTimerColor(),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: LinearProgressIndicator(
-                    value: _remainingSeconds / _totalSeconds,
-                    minHeight: 20,
-                    backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(_getTimerColor()),
+                const SizedBox(width: 12),
+                Text(
+                  '$_remainingSeconds秒',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: _getTimerColor(),
                   ),
                 ),
               ],
@@ -430,17 +424,25 @@ class _Numeron4GamePageState extends State<Numeron4GamePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Expanded(
-              child: _game.history.isEmpty
-                  ? const Center(
+            _game.history.isEmpty
+                ? const SizedBox(
+                    height: 100,
+                    child: Center(
                       child: Text(
                         'まだ予想がありません\n数字を入力して始めましょう！',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.grey),
                       ),
-                    )
-                  : ListView.builder(
+                    ),
+                  )
+                : ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 300,
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
                       reverse: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _game.history.length,
                       itemBuilder: (context, index) {
                         final historyIndex = _game.history.length - 1 - index;

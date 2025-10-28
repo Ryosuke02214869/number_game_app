@@ -13,6 +13,7 @@ class _NumeronGamePageState extends State<NumeronGamePage> {
   final NumeronGame _game = NumeronGame();
   final TextEditingController _controller = TextEditingController();
   String _errorMessage = '';
+  bool _isRuleExpanded = true;
 
   @override
   void dispose() {
@@ -120,38 +121,77 @@ class _NumeronGamePageState extends State<NumeronGamePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // 試行回数表示（常に表示）
             Card(
               elevation: 2,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'ルール説明',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      '重複のない4桁の数字を当ててください\n'
-                      'HIT: 位置と数字が一致\n'
-                      'BITE: 数字は一致するが位置が異なる',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(height: 8),
+                    const Icon(Icons.numbers, size: 20),
+                    const SizedBox(width: 8),
                     Text(
                       '試行回数: ${_game.attemptCount}',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // ルール説明（折りたたみ可能）
+            Card(
+              elevation: 2,
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isRuleExpanded = !_isRuleExpanded;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'ルール説明',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(
+                            _isRuleExpanded
+                                ? Icons.expand_less
+                                : Icons.expand_more,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_isRuleExpanded)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 16.0,
+                      ),
+                      child: const Text(
+                        '重複のない4桁の数字を当ててください\n'
+                        'HIT: 位置と数字が一致\n'
+                        'BITE: 数字は一致するが位置が異なる',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
